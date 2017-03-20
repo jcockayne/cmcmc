@@ -8,6 +8,7 @@ RelWithDebInfo MinSizeRel."
       FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
 
+option(CMCMC_TESTS "Build tests with CMCMC" ON)
 project (cmcmc C CXX)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
@@ -36,12 +37,13 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DENABLE_LOG_ERROR -DENA
 add_library(cmcmc STATIC ${SOURCES})
 target_compile_features(cmcmc PRIVATE cxx_range_for)
 
-file(GLOB TEST_SOURCES "src/test/*.cpp")
-add_executable(test "src/test/test.cpp" ${TEST_SOURCES})
-target_link_libraries(test cmcmc)
-# target_link_libraries(test ${CMAKE_THREAD_LIBS_INIT})
-target_compile_features(test PRIVATE cxx_range_for)
-
+if(CMCMC_TESTS)
+	file(GLOB TEST_SOURCES "src/test/*.cpp")
+	add_executable(test "src/test/test.cpp" ${TEST_SOURCES})
+	target_link_libraries(test cmcmc)
+	# target_link_libraries(test ${CMAKE_THREAD_LIBS_INIT})
+	target_compile_features(test PRIVATE cxx_range_for)
+endif()
 
 #enable_testing()
 #add_test(NAME hermite COMMAND test)

@@ -12,6 +12,20 @@ std::unique_ptr<OneKernelResult> apply_one_kernel_pcn(
 	bool return_samples
 )
 {
+	Eigen::VectorXd prior_mean = Eigen::VectorXd::Zero(sample.rows());
+	return apply_one_kernel_pcn(sample, n_transitions, beta, log_likelihood_function, prior_mean, sqrt_prior_cov, return_samples);
+}
+
+std::unique_ptr<OneKernelResult> apply_one_kernel_pcn(
+	const Eigen::VectorXd &sample,
+	int n_transitions,
+	double beta,
+	std::function<double(Eigen::VectorXd &)> log_likelihood_function,
+	const Eigen::VectorXd &prior_mean,
+	const Eigen::MatrixXd &sqrt_prior_cov,
+	bool return_samples
+)
+{
 
 	std::default_random_engine generator(std::random_device{}());
 	std::uniform_real_distribution<double> uniform_distribution(0.0,1.0);
@@ -36,7 +50,7 @@ std::unique_ptr<OneKernelResult> apply_one_kernel_pcn(
 		for(int j = 0; j < sqrt_prior_cov.cols(); j++) {
 			random_noise(j) = gaussian_distribution(generator);
 		}
-		Eigen::VectorXd next = sqrt_1_m_beta*cur + scaled_cov * random_noise;
+		Eigen::VectorXd next = prior_mean + sqrt_1_m_beta*(cur-prior_mean) + scaled_cov * random_noise;
 
 		// accept / reject
 		double next_log_likelihood = log_likelihood_function(next);

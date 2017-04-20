@@ -11,7 +11,6 @@ public:
 		const Eigen::VectorXd preconditioner,
 		const double tau
 	);
-public:
 	virtual std::unique_ptr<OneKernelResult> apply(const Eigen::VectorXd &sample, const int n_transitions, const bool return_path=true);
 	virtual double log_target(const Eigen::VectorXd &sample) const;
 private:

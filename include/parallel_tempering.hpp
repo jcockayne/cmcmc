@@ -1,7 +1,8 @@
 #include <Eigen/Core>
 #include <vector>
 #include <memory>
-
+#include "kernel_result.hpp"
+#include "kernels/base.hpp"
 
 std::unique_ptr<ParallelTemperingResult> apply_kernel_pt(
 	const Eigen::MatrixXd &x0, 

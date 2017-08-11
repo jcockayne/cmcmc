@@ -94,6 +94,7 @@ std::vector<std::unique_ptr<Eigen::MatrixXd>> apply_pt(
 			int out_row = (int)(i * 1./thinning);
 			for(int j = 0; j < target_ixs.size(); j++){
 				int target_ix = target_ixs.at(j);
+				if(target_ix < 0) target_ix = kernels.size() - i;
 				// not taking ownership
 				Eigen::MatrixXd *ret_matrix = ret.at(j).get();
 				ret_matrix->row(out_row) = cur_sample.row(target_ix);
